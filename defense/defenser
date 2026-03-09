@@ -1,0 +1,17 @@
+#!/bin/bash
+
+## crops and converts to gif
+
+IN=$1
+OU="defensegifs/$(basename $IN .mp4).gif"
+
+echo $IN $OU
+
+##
+## simple hstack
+#ffmpeg -i $V1 -i $V2 -filter_complex hstack $O1 
+
+
+
+#ffmpeg -i $V1 -i $V2 -filter_complex "[0:v]crop=ih:ih[v0];[1:v]crop=ih:ih[v1];[v0][v1]hstack[out]" -map "[out]" $O1 
+ffmpeg -i $IN -vf "crop=ih:ih,fps=60,scale=512:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 $OU
